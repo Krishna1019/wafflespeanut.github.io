@@ -1,24 +1,102 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Arrow of Code]]></title>
-  <link href="http://wafflespeanut.github.io/atom.xml" rel="self"/>
-  <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-07-05T21:55:52+05:30</updated>
-  <id>http://wafflespeanut.github.io/</id>
-  <author>
-    <name><![CDATA[Ravi Shankar]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>A Pythonist getting Rusty these days... (Part 1) - Arrow of Code</title>
+  <meta name="author" content="Ravi Shankar">
 
   
-  <entry>
-    <title type="html"><![CDATA[A Pythonist getting Rusty these days... (Part 1)]]></title>
-    <link href="http://wafflespeanut.github.io/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot/"/>
-    <updated>2015-07-05T20:39:06+05:30</updated>
-    <id>http://wafflespeanut.github.io/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot</id>
-    <content type="html"><![CDATA[<p>Though I&rsquo;ve been playing with Python and JS for a while, getting into systems programming is one of the things I&rsquo;ve always wanted to do. The increased talks about Rust in the IRC (in the previous months), followed by the release of Rust 1.0 gave me a kickstart, which took me into Rust about two weeks back.</p>
+  <meta name="description" content="Though I&rsquo;ve been playing with Python and JS for a while, getting into systems programming is one of the things I&rsquo;ve always wanted to do. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://wafflespeanut.github.io/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Arrow of Code" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-64401105-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Arrow of Code</a></h1>
+  
+    <h2>Scribblings from a physics nerd...</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="wafflespeanut.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">A Pythonist getting Rusty these days... (Part 1)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-07-05T20:39:06+05:30'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>8:39 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Though I&rsquo;ve been playing with Python and JS for a while, getting into systems programming is one of the things I&rsquo;ve always wanted to do. The increased talks about Rust in the IRC (in the previous months), followed by the release of Rust 1.0 gave me a kickstart, which took me into Rust about two weeks back.</p>
 
 <p>I got to see the beauty of Rust (thanks to the <a href="http://doc.rust-lang.org/book/">wonderful book</a>) and I immediately liked it - its syntax, static type system, vast compile-time checking, etc., especially how it tackles the problem of memory safety by introducing a new concept called <strong>ownership</strong> and it does all those without the use of a garbage collector.</p>
 
@@ -203,23 +281,144 @@
 </ol>
 </div>
 
-]]></content>
-  </entry>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
   
-  <entry>
-    <title type="html"><![CDATA[My New Blog!]]></title>
-    <link href="http://wafflespeanut.github.io/blog/2015/06/23/my-new-octopress-blog/"/>
-    <updated>2015-06-23T03:52:10+05:30</updated>
-    <id>http://wafflespeanut.github.io/blog/2015/06/23/my-new-octopress-blog</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve been a wordpress blogger for over two years now. My previous blog <a href="https://wafflescrazypeanut.wordpress.com">Arrow of time</a> was actually meant for writing about Physics (among other random stuff). It was a success, and I had a great time writing in my wordpress blog. But nowadays, I&rsquo;m more interested in code (than in Physics) and so, I think it&rsquo;s time to move on.</p>
 
-<!-- more -->
+<span class="byline author vcard">Posted by <span class="fn">Ravi Shankar</span></span>
+
+      
 
 
-<p><strong>Why this blog?</strong> Because, Wordpress <em>sucks</em> when it comes to code-formatting! (just like many other blog providers). Plus, I&rsquo;ve always wanted to use Github pages for blogging. And, nothing else can beat the beautiful <a href="https://en.wikipedia.org/wiki/Markdown">markdown</a>! So, here I am, with my new Octopress-powered blog, where I&rsquo;ll be writing about my favorite times with code (mostly Python &amp; Rust), which (I hope) will be interesting for everyone.</p>
 
-<p><strong>What about the old blog?</strong> Well, I&rsquo;ll still be using my old blog for posting random stuff though (if I had time).</p>
-]]></content>
-  </entry>
+
+<time class='entry-date' datetime='2015-07-05T20:39:06+05:30'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>8:39 pm</span></time>
+      
+
+<span class="categories">
   
-</feed>
+    <a class='category' href='/blog/categories/coding/'>coding</a>, <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/rust/'>rust</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://wafflespeanut.github.io/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot/" data-via="wafflespeanut" data-counturl="http://wafflespeanut.github.io/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/06/23/my-new-octopress-blog/" title="Previous Post: My New Blog!">&laquo; My New Blog!</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>Hi there. I'm an undergrad student in aeronautics, with a lot of interest in physics and coding.</p>
+  <p>I like participating in online communities and contributing to open-source. I'm a <em>Pythonist</em>, a <em>Mozillian</em>, and nowadays I'm also a <em>Rustacean</em>.</p>
+  <iframe scrolling="no" style="border: 0; height: 64px; width: 220px; overflow: hidden;" src="http://se-flair.appspot.com/1719640.html"></iframe>
+  <a href="https://github.com/Wafflespeanut"><img style="border:none; box-shadow:none" src="/images/github.png" width="43" height="43"></a>
+  <a href="https://twitter.com/wafflespeanut"><img style="padding:5px; border:none; box-shadow:none" src="/images/twitter.png" width="48" height="48"></a>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot/">A Pythonist getting Rusty these days... (Part 1)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/23/my-new-octopress-blog/">My New Blog!</a>
+      </li>
+    
+  </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Ravi Shankar -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'wafflespeanut';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://wafflespeanut.github.io/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot/';
+        var disqus_url = 'http://wafflespeanut.github.io/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
