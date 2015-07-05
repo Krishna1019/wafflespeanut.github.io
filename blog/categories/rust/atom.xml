@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rust | Arrow of Code]]></title>
   <link href="http://wafflespeanut.github.io/blog/categories/rust/atom.xml" rel="self"/>
   <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-07-05T23:02:24+05:30</updated>
+  <updated>2015-07-05T23:37:11+05:30</updated>
   <id>http://wafflespeanut.github.io/</id>
   <author>
     <name><![CDATA[Ravi Shankar]]></name>
@@ -90,14 +90,14 @@ To learn more, run the command again with --verbose.
 <p>Apart from those, some things were much similar to (but much more powerful than) Python, that sometimes I felt Rust&rsquo;s style as high-level. For example, we can unpack tuples and iterate over things just like we do in Python,</p>
 
 <pre><code class="python">(x, y, z) = (1, 2, 3)   # sequence unpacking
-for i in [1, 2, 3]:     # iterating over a list
+for i in [3, 5, 7]:     # iterating over a list
     print i
 </code></pre>
 
 <p>In Rust, <code>let</code> does the same job, and <code>in</code> works more or less the same (in the sense, that it calls the <code>iter()</code> method, similar to <code>next()</code> in Python). You can&rsquo;t search with it like you do in Python, though. <em>Meh, how much more can you expect from a systems language?</em></p>
 
 <pre><code class="rust">let (mut x, y, z) = (1, 2, 3);  // same unpacking
-for i in &amp;[1, 2, 3] {           // iterating over a slice
+for i in &amp;[3, 5, 7] {           // iterating directly over a slice
     println!("{:?}", i); }
 </code></pre>
 
@@ -150,7 +150,7 @@ let x = extract(x);         // `String` compensation for the owner who once owne
 <li id="fn:1">
 <p>It <em>was</em> a very basic thing - it just wrote the story into a file, hexes and shifts the ASCII values (my encryption was just a hexed Caesar cipher). That was the state of it <a href="https://github.com/Wafflespeanut/scripts/blob/8850c831c10955b5c32d2710abfbfef916031792/Memorandum/Diary.py">until about a month ago</a>.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 <li id="fn:2">
-<p>Rust supports unicode, and so <a href="https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8"><code>from_utf8</code></a> method is likely to throw an error if the bytes are invalid. Also, Rust offers a <a href="https://doc.rust-lang.org/std/io/trait.Read.html">file-reader</a> for reading the contents as bytes. So, I decided to handle everything (including the search) with bytes instead of strings.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<p>Rust strings are valid UTF-8 by default, and so <a href="https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8"><code>from_utf8</code></a> method is likely to throw an error if the bytes are invalid. Also, Rust offers a <a href="https://doc.rust-lang.org/std/io/trait.Read.html">file-reader</a> for reading the contents as bytes. So, I decided to handle everything (including the search) with bytes instead of strings.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
 <li id="fn:3">
 <p>Honestly, Rust is also my first language where I felt <em>happy</em> about errors, because I knew (almost immediately) what I should do next to prevent it.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
 <li id="fn:4">

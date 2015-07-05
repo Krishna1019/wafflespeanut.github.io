@@ -197,7 +197,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='python'><span class='line'><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>   <span class="c"># sequence unpacking</span>
-</span><span class='line'><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>     <span class="c"># iterating over a list</span>
+</span><span class='line'><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">]:</span>     <span class="c"># iterating over a list</span>
 </span><span class='line'>    <span class="k">print</span> <span class="n">i</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -208,7 +208,7 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="kd">let</span> <span class="p">(</span><span class="k">mut</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>  <span class="c1">// same unpacking</span>
-</span><span class='line'><span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">&amp;</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="p">{</span>           <span class="c1">// iterating over a slice</span>
+</span><span class='line'><span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">&amp;</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span> <span class="p">{</span>           <span class="c1">// iterating directly over a slice</span>
 </span><span class='line'>    <span class="nb">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;{:?}&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -278,7 +278,7 @@
 <li id="fn:1">
 <p>It <em>was</em> a very basic thing - it just wrote the story into a file, hexes and shifts the ASCII values (my encryption was just a hexed Caesar cipher). That was the state of it <a href="https://github.com/Wafflespeanut/scripts/blob/8850c831c10955b5c32d2710abfbfef916031792/Memorandum/Diary.py">until about a month ago</a>.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 <li id="fn:2">
-<p>Rust supports unicode, and so <a href="https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8"><code>from_utf8</code></a> method is likely to throw an error if the bytes are invalid. Also, Rust offers a <a href="https://doc.rust-lang.org/std/io/trait.Read.html">file-reader</a> for reading the contents as bytes. So, I decided to handle everything (including the search) with bytes instead of strings.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<p>Rust strings are valid UTF-8 by default, and so <a href="https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8"><code>from_utf8</code></a> method is likely to throw an error if the bytes are invalid. Also, Rust offers a <a href="https://doc.rust-lang.org/std/io/trait.Read.html">file-reader</a> for reading the contents as bytes. So, I decided to handle everything (including the search) with bytes instead of strings.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
 <li id="fn:3">
 <p>Honestly, Rust is also my first language where I felt <em>happy</em> about errors, because I knew (almost immediately) what I should do next to prevent it.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
 <li id="fn:4">
