@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Blog | Arrow of Code]]></title>
+  <title><![CDATA[Category: blog | Arrow of Code]]></title>
   <link href="http://wafflespeanut.github.io/blog/categories/blog/atom.xml" rel="self"/>
   <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-06-23T13:12:54+05:30</updated>
+  <updated>2015-07-05T18:48:05+05:30</updated>
   <id>http://wafflespeanut.github.io/</id>
   <author>
     <name><![CDATA[Ravi Shankar]]></name>
