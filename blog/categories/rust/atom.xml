@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rust | Arrow of Code]]></title>
   <link href="http://wafflespeanut.github.io/blog/categories/rust/atom.xml" rel="self"/>
   <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-07-05T21:55:52+05:30</updated>
+  <updated>2015-07-05T22:20:57+05:30</updated>
   <id>http://wafflespeanut.github.io/</id>
   <author>
     <name><![CDATA[Ravi Shankar]]></name>
@@ -22,7 +22,10 @@
 
 <p>I got to see the beauty of Rust (thanks to the <a href="http://doc.rust-lang.org/book/">wonderful book</a>) and I immediately liked it - its syntax, static type system, vast compile-time checking, etc., especially how it tackles the problem of memory safety by introducing a new concept called <strong>ownership</strong> and it does all those without the use of a garbage collector.</p>
 
-<p>In this post (and the upcoming ones), I&rsquo;ll try to explain what I liked about Rust and how I got around some of the worst situations I experienced as a newbie into the systems world.</p>
+<p>Today, I&rsquo;ll try to explain what I liked about Rust. The upcoming ones are reserved for topics like FFI and concurrency, and how I got around some of the worst situations I&rsquo;ve experienced as a newbie into the systems programming world.</p>
+
+<!-- more -->
+
 
 <h2>What I&rsquo;d been doing?</h2>
 
@@ -139,6 +142,8 @@ let x = extract(x);         // `String` compensation for the owner who once owne
 <p>That&rsquo;s the only way we can prevent data races. We can achieve most of the things using immutable references <code>&amp;T</code> (where <code>T</code> is some type). I&rsquo;ve used mutable references only when I spawn threads i.e., when things get serious and a lot of threads require mutable references. Then, we can use <a href="https://doc.rust-lang.org/std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code></a> and <a href="https://doc.rust-lang.org/std/sync/struct.Mutex.html"><code>Mutex&lt;T&gt;</code></a> to execute such operations safely.</p>
 
 <p>As far as I&rsquo;ve seen, Rust offers various kinds of interesting options to easily get around most of the complex situations. For all the high-level coders out there, if you&rsquo;ve always wanna get into systems programming, then I suggest &ldquo;Rust&rdquo; as a nice start!</p>
+
+<p><sup>Thanks to Manish for reviewing this post and thanks to all the <em>Rustaceans</em> who helped me whenever I got into the #rust channel.</sup></p>
 <div class="footnotes">
 <hr/>
 <ol>
