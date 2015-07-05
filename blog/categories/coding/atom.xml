@@ -4,7 +4,7 @@
   <title><![CDATA[Category: coding | Arrow of Code]]></title>
   <link href="http://wafflespeanut.github.io/blog/categories/coding/atom.xml" rel="self"/>
   <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-07-05T22:20:57+05:30</updated>
+  <updated>2015-07-05T23:02:24+05:30</updated>
   <id>http://wafflespeanut.github.io/</id>
   <author>
     <name><![CDATA[Ravi Shankar]]></name>
@@ -22,7 +22,7 @@
 
 <p>I got to see the beauty of Rust (thanks to the <a href="http://doc.rust-lang.org/book/">wonderful book</a>) and I immediately liked it - its syntax, static type system, vast compile-time checking, etc., especially how it tackles the problem of memory safety by introducing a new concept called <strong>ownership</strong> and it does all those without the use of a garbage collector.</p>
 
-<p>Today, I&rsquo;ll try to explain what I liked about Rust. The upcoming ones are reserved for topics like FFI and concurrency, and how I got around some of the worst situations I&rsquo;ve experienced as a newbie into the systems programming world.</p>
+<p>Today, I&rsquo;ll try to explain what I liked about Rust. The upcoming ones are reserved for topics like FFI and concurrency, and how I got around some of the worst situations I&rsquo;ve experienced as a newbie who just into the systems programming world.</p>
 
 <!-- more -->
 
@@ -31,7 +31,7 @@
 
 <p><em>If you&rsquo;re just interested in the code, please feel free to skip this part.</em></p>
 
-<p>It was quite hard for me at first, to understand how Rust worked. So, I decided to translate one of my Python works to Rust - a private diary I&rsquo;d written in Python<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> about an year back (when I just got into coding).</p>
+<p>It was quite hard for me at first, to understand how Rust worked. So, I decided to translate one of my Python works to Rust - a private diary I&rsquo;d written in Python<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> about an year back.</p>
 
 <p>As I got to know more and more about Rust, I began to look for ways to make my code more efficient. Honestly, I had to rewrite my entire diary to achieve that. I changed the data structure, the encryption scheme, the options it provided, etc., that one day it got quite big, (~500 lines of code) that I had to shift it to <a href="https://github.com/Wafflespeanut/biographer">a new repository</a>.</p>
 
@@ -41,7 +41,7 @@
 
 <p><em>I liked a lot of things when I was making the library for my diary, which I&rsquo;ll elaborate in this post. We&rsquo;ll get into FFI and concurrency in future posts (because I&rsquo;ve got a lot of stuff in those topics).</em></p>
 
-<p>The only thing that resembles C++ is how we call the methods or traits from modules (like <code>std::thread</code>). The <strong>syntax</strong> for all the other things are very different and they&rsquo;re the ones which impressed me at first. As an example, let&rsquo;s write a function for Caesar cipher.</p>
+<p>The only thing that resembles C++ is how we call the methods or traits from modules (like <code>std::thread</code>). The <strong>syntax</strong> for all the other things are very different and they&rsquo;re the ones which impressed me at the first place. As an example, let&rsquo;s write a function for Caesar cipher.</p>
 
 <p>In Python, we have this simple (yet amusing) list comprehension,</p>
 
@@ -85,7 +85,7 @@ Could not compile `demo`.
 To learn more, run the command again with --verbose.
 </code></pre>
 
-<p>It tells that the type doesn&rsquo;t implement our <code>blah</code> method (and it points the exact location where it has occurred). This was very helpful for me for more complicated cases (which we&rsquo;ll see later). The same goes for warnings (which can come out of camel cases, deprecated APIs, unused variables, etc.)</p>
+<p>It tells us that the type <code>core::iter::Map&lt;core::slice::Iter&lt;_, u8&gt;, [closure ...]&gt;</code> doesn&rsquo;t implement our <code>blah</code> method (by which it&rsquo;s letting us know about the exact type), and it also points to the exact location where it has occurred (the same goes for warnings, which can come out of camel cases, deprecated APIs, unused variables, etc.). This <em>type-shouting</em> was very helpful for me while working with complicated types, specifically when I&rsquo;m not sure about what type I get at some location.</p>
 
 <p>Apart from those, some things were much similar to (but much more powerful than) Python, that sometimes I felt Rust&rsquo;s style as high-level. For example, we can unpack tuples and iterate over things just like we do in Python,</p>
 
@@ -139,7 +139,7 @@ let x = extract(x);         // `String` compensation for the owner who once owne
 </ul>
 </blockquote>
 
-<p>That&rsquo;s the only way we can prevent data races. We can achieve most of the things using immutable references <code>&amp;T</code> (where <code>T</code> is some type). I&rsquo;ve used mutable references only when I spawn threads i.e., when things get serious and a lot of threads require mutable references. Then, we can use <a href="https://doc.rust-lang.org/std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code></a> and <a href="https://doc.rust-lang.org/std/sync/struct.Mutex.html"><code>Mutex&lt;T&gt;</code></a> to execute such operations safely.</p>
+<p>That&rsquo;s the only way we can prevent data races. That being said, we can achieve most of the things using immutable references like <code>&amp;T</code> (where <code>T</code> is some type). I&rsquo;ve used mutable references only when I spawn threads i.e., when things get serious and a lot of threads require mutable references. In such a condition, we can use <a href="https://doc.rust-lang.org/std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code></a> and <a href="https://doc.rust-lang.org/std/sync/struct.Mutex.html"><code>Mutex&lt;T&gt;</code></a> to execute operations safely.</p>
 
 <p>As far as I&rsquo;ve seen, Rust offers various kinds of interesting options to easily get around most of the complex situations. For all the high-level coders out there, if you&rsquo;ve always wanna get into systems programming, then I suggest &ldquo;Rust&rdquo; as a nice start!</p>
 
