@@ -4,7 +4,7 @@
   <title><![CDATA[Arrow of Code]]></title>
   <link href="http://wafflespeanut.github.io/atom.xml" rel="self"/>
   <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-07-05T23:45:40+05:30</updated>
+  <updated>2015-07-06T15:51:30+05:30</updated>
   <id>http://wafflespeanut.github.io/</id>
   <author>
     <name><![CDATA[Ravi Shankar]]></name>
@@ -60,10 +60,12 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
+<span class='line-number'>5</span>
 </pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="k">fn</span> <span class="n">shift</span><span class="p">(</span><span class="n">text_bytes</span><span class="o">:</span> <span class="o">&amp;</span><span class="n">Vec</span><span class="o">&lt;</span><span class="kt">u8</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">amount</span><span class="o">:</span> <span class="kt">u8</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vec</span><span class="o">&lt;</span><span class="kt">u8</span><span class="o">&gt;</span> <span class="p">{</span>
 </span><span class='line'>    <span class="n">text_bytes</span><span class="p">.</span><span class="n">iter</span><span class="p">()</span> <span class="c1">// wrap around the boundary if the sum overflows</span>
 </span><span class='line'>        <span class="p">.</span><span class="n">map</span><span class="p">(</span><span class="o">|</span><span class="n">byte</span><span class="o">|</span> <span class="n">amount</span><span class="p">.</span><span class="n">wrapping_add</span><span class="p">(</span><span class="o">*</span><span class="n">byte</span><span class="p">))</span>
-</span><span class='line'>        <span class="p">.</span><span class="n">collect</span><span class="o">::&lt;</span><span class="n">Vec</span><span class="o">&lt;</span><span class="kt">u8</span><span class="o">&gt;&gt;</span><span class="p">()</span> <span class="p">}</span>
+</span><span class='line'>        <span class="p">.</span><span class="n">collect</span><span class="p">()</span> <span class="p">}</span>
+</span><span class='line'><span class="c1">// we don&#39;t have to say `collect::&lt;Vec&lt;u8&gt;&gt;()` explicitly, thanks to Rust&#39;s type inference</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -124,7 +126,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>In Rust, <code>let</code> does the same job, and <code>in</code> works more or less the same (in the sense, that it calls the <code>iter()</code> method, similar to <code>next()</code> in Python). You can&rsquo;t search with it like you do in Python, though. <em>Meh, how much more can you expect from a systems language?</em></p>
+<p>In Rust, <code>let</code> does the same job, and <code>in</code> works more or less the same (in the sense, that it calls the <code>iter()</code> method, just like the <code>iter()</code> in Python). But, you can&rsquo;t search with the <code>in</code> like you do in Python, though. <em>Meh, how much more can you expect from a systems language?</em></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>

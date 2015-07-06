@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rust | Arrow of Code]]></title>
   <link href="http://wafflespeanut.github.io/blog/categories/rust/atom.xml" rel="self"/>
   <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-07-05T23:45:40+05:30</updated>
+  <updated>2015-07-06T15:51:30+05:30</updated>
   <id>http://wafflespeanut.github.io/</id>
   <author>
     <name><![CDATA[Ravi Shankar]]></name>
@@ -55,7 +55,8 @@
 <pre><code class="rust">fn shift(text_bytes: &amp;Vec&lt;u8&gt;, amount: u8) -&gt; Vec&lt;u8&gt; {
     text_bytes.iter() // wrap around the boundary if the sum overflows
         .map(|byte| amount.wrapping_add(*byte))
-        .collect::&lt;Vec&lt;u8&gt;&gt;() }
+        .collect() }
+// we don't have to say `collect::&lt;Vec&lt;u8&gt;&gt;()` explicitly, thanks to Rust's type inference
 </code></pre>
 
 <p>I&rsquo;m just iterating over the bytes, mapping a function over the values using a closure <code>|byte|</code> and finally collect everything into a vector of 8-bit unsigned integers. Notice the absence of <code>;</code> at the end of the expression. Since the function has a return type denoted by <code>-&gt;</code> (which is a <code>Vec&lt;u8&gt;</code> in this case), Rust automatically <em>infers</em> this as the result of the function. Then, there are these types for each argument, which brings me to my next favorite thing - <strong>static type system</strong>.</p>
@@ -94,7 +95,7 @@ for i in [3, 5, 7]:     # iterating over a list
     print i
 </code></pre>
 
-<p>In Rust, <code>let</code> does the same job, and <code>in</code> works more or less the same (in the sense, that it calls the <code>iter()</code> method, similar to <code>next()</code> in Python). You can&rsquo;t search with it like you do in Python, though. <em>Meh, how much more can you expect from a systems language?</em></p>
+<p>In Rust, <code>let</code> does the same job, and <code>in</code> works more or less the same (in the sense, that it calls the <code>iter()</code> method, just like the <code>iter()</code> in Python). But, you can&rsquo;t search with the <code>in</code> like you do in Python, though. <em>Meh, how much more can you expect from a systems language?</em></p>
 
 <pre><code class="rust">let (mut x, y, z) = (1, 2, 3);  // same unpacking
 for i in &amp;[3, 5, 7] {           // iterating directly over a slice
