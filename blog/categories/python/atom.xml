@@ -4,7 +4,7 @@
   <title><![CDATA[Category: python | Arrow of Code]]></title>
   <link href="http://wafflespeanut.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-07-06T21:35:00+05:30</updated>
+  <updated>2015-07-06T21:42:07+05:30</updated>
   <id>http://wafflespeanut.github.io/</id>
   <author>
     <name><![CDATA[Ravi Shankar]]></name>
@@ -31,9 +31,9 @@
 
 <p><em>If you&rsquo;re just interested in the code, please feel free to skip this part.</em></p>
 
-<p>It was quite hard for me at first, to understand how Rust worked. So, I decided to translate one of my Python works to Rust - a private diary I&rsquo;d written in Python<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> about an year back.</p>
+<p>It was quite hard for me at first, to understand how Rust worked. So, I decided to translate one of my Python works to Rust - a private diary I had written in Python<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> about an year back.</p>
 
-<p>As I got to know more and more about Rust, I began to look for ways to make my code more efficient. Honestly, I had to rewrite my entire diary to achieve that. I changed the data structure, the encryption scheme, the options it provided, etc., that one day it got quite big, (~500 lines of code) that I had to shift it to <a href="https://github.com/Wafflespeanut/biographer">a new repository</a>.</p>
+<p>As I got to know more and more about Rust, I began to look for ways to make my code more <em>efficient</em>. Honestly, I had to rewrite my entire diary to achieve that. I changed the data structure, the encryption scheme, the options it provided, etc., that one day it got quite big, (~500 lines of code) that I had to shift it to <a href="https://github.com/Wafflespeanut/biographer">a new repository</a>.</p>
 
 <p>I realized that translating the diary is probably a bad idea at this point. Luckily, there was one thing I could offer. My diary supported <em>searching</em> through the encrypted stories. This is where high-level languages suck. So, I decided to integrate Rust into my diary, by writing a library (which can search at lightning speed!). To achieve that, I had two things in mind - <a href="http://en.wikipedia.org/wiki/Foreign_function_interface">FFI</a> and concurrency, which Rust handled quite <em>nicely</em>. That&rsquo;s where my life as a <em>Rustacean</em> began.</p>
 
@@ -68,7 +68,7 @@
 <pre><code class="rust">fn shift(text_bytes: &amp;Vec&lt;u8&gt;, amount: u8) -&gt; Vec&lt;u8&gt; {
     text_bytes.iter() // wrap around the boundary if the sum overflows
         .map(|byte| amount.wrapping_add(*byte))
-        // .collect::&lt;Vec&lt;u8&gt;&gt;()
+        // .collect()
         .blah() }       // note the `blah`
 </code></pre>
 
@@ -151,7 +151,7 @@ let x = extract(x);         // `String` compensation for the owner who once owne
 <li id="fn:1">
 <p>It <em>was</em> a very basic thing - it just wrote the story into a file, hexes and shifts the ASCII values (my encryption was just a hexed Caesar cipher). That was the state of it <a href="https://github.com/Wafflespeanut/scripts/blob/8850c831c10955b5c32d2710abfbfef916031792/Memorandum/Diary.py">until about a month ago</a>.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 <li id="fn:2">
-<p>Rust strings are valid UTF-8 by default, and so <a href="https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8"><code>from_utf8</code></a> method is likely to throw an error if the bytes are invalid. Also, Rust offers a <a href="https://doc.rust-lang.org/std/io/trait.Read.html">file-reader</a> for reading the contents as bytes. So, I decided to handle everything (including the search) with bytes instead of strings.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<p>Rust strings are valid UTF-8 by default, and so <a href="https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8"><code>from_utf8</code></a> method is likely to throw an error if the bytes are invalid. Also, Rust offers a <a href="https://doc.rust-lang.org/std/io/trait.Read.html">file-reader</a> for reading the contents as bytes. So, I decided to handle everything (including the search) using bytes rather than strings.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
 <li id="fn:3">
 <p>Honestly, Rust is also my first language where I felt <em>happy</em> about errors, because I knew (almost immediately) what I should do next to prevent it.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
 <li id="fn:4">
