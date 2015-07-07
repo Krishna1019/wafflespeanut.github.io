@@ -4,7 +4,7 @@
   <title><![CDATA[Arrow of Code]]></title>
   <link href="http://wafflespeanut.github.io/atom.xml" rel="self"/>
   <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-07-07T18:26:19+05:30</updated>
+  <updated>2015-07-07T18:28:11+05:30</updated>
   <id>http://wafflespeanut.github.io/</id>
   <author>
     <name><![CDATA[Ravi Shankar]]></name>
@@ -12,23 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[A Pythonist getting Rusty these days... (Part 2)]]></title>
-    <link href="http://wafflespeanut.github.io/blog/2015/07/07/a-pythonist-getting-rusty-these-days-dot-dot-dot-part-2/"/>
-    <updated>2015-07-07T10:17:58+05:30</updated>
-    <id>http://wafflespeanut.github.io/blog/2015/07/07/a-pythonist-getting-rusty-these-days-dot-dot-dot-part-2</id>
-    <content type="html"><![CDATA[<p>Last time, I talked about <a href="http://wafflespeanut.github.io/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot">my experience in Rust as a newbie</a>. Today, I&rsquo;ll try to explain my hard time with the <a href="http://en.wikipedia.org/wiki/Foreign_function_interface">FFI</a>. Well, I shouldn&rsquo;t have gone into it, but I needed that for communication with Python<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. I&rsquo;ll also address some basic concurrency along with that.</p>
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>Of course, it&rsquo;s for that very same <a href="https://github.com/Wafflespeanut/biographer">diary</a> I had talked about. I had to decrypt a lot of files and search through them (which Rust is pretty good at).<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[A Pythonist getting Rusty these days... (Part 1)]]></title>
