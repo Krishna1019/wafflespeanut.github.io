@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://wafflespeanut.github.io/blog/2015/07/07/a-pythonist-getting-rusty-these-days-dot-dot-dot-part-2/</loc>
+    <lastmod>2015-07-07T10:17:58+05:30</lastmod>
+  </url>
+  <url>
     <loc>http://wafflespeanut.github.io/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot/</loc>
     <lastmod>2015-07-05T20:39:06+05:30</lastmod>
   </url>
