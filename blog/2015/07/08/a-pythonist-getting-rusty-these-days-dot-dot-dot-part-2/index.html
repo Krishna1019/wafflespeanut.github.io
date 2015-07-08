@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Arrow of Code</title>
+  <title>A Pythonist getting Rusty these days... (Part 2) - Arrow of Code</title>
   <meta name="author" content="Ravi Shankar">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://wafflespeanut.github.io/">
+  <link rel="canonical" href="http://wafflespeanut.github.io/blog/2015/07/08/a-pythonist-getting-rusty-these-days-dot-dot-dot-part-2/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Arrow of Code" type="application/atom+xml">
@@ -75,15 +75,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2015/07/08/a-pythonist-getting-rusty-these-days-dot-dot-dot-part-2/">A Pythonist getting Rusty these days... (Part 2)</a></h1>
+      <h1 class="entry-title">A Pythonist getting Rusty these days... (Part 2)</h1>
     
     
       <p class="meta">
@@ -99,7 +96,7 @@
   </header>
 
 
-  <div class="entry-content"><p>Last time, I talked about <a href="http://wafflespeanut.github.io/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot">my experience with Rust as a newbie</a>. Today, I&rsquo;ll try to explain the hard time I had with the <a href="http://en.wikipedia.org/wiki/Foreign_function_interface">FFI</a>. Well, I shouldn&rsquo;t have gone into it, but I needed that for communication with Python<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
+<div class="entry-content"><p>Last time, I talked about <a href="http://wafflespeanut.github.io/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot">my experience with Rust as a newbie</a>. Today, I&rsquo;ll try to explain the hard time I had with the <a href="http://en.wikipedia.org/wiki/Foreign_function_interface">FFI</a>. Well, I shouldn&rsquo;t have gone into it, but I needed that for communication with Python<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
 
 <p>FFI was <em>hard</em>, because I can&rsquo;t quite guess what happens along the way. Errors don&rsquo;t mean much, which means that I can get the results only during runtime (and then figure out whether it&rsquo;s the cake I want or not). Then, there&rsquo;s this <em>interesting</em> problem of memory safety. Rust is specifically designed to be memory safe, but most of the other languages aren&rsquo;t (especially C, and so is its descendant, &ldquo;Python&rdquo;). They both can only speak &ldquo;C&rdquo; in their low level. So, Rust <em>has</em> to speak C if it wants to communicate with Python.</p>
 
@@ -287,90 +284,62 @@
 </div>
 
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot/">A Pythonist getting Rusty these days... (Part 1)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-07-05T20:39:06+05:30'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>8:39 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Though I&rsquo;ve been playing with Python and JS for a while, getting into systems programming is one of the things I&rsquo;ve always wanted to do. The increased talks about Rust in the IRC (in the previous months), followed by the release of Rust 1.0 gave me a kickstart, which took me into Rust about two weeks back.</p>
-
-<p>I got to see the beauty of Rust (thanks to the <a href="http://doc.rust-lang.org/book/">wonderful book</a>) and I immediately liked it - its syntax, static type system, vast compile-time checking, etc., especially how it tackles the problem of memory safety by introducing a new concept called <strong>ownership</strong> and it does all those without the use of a garbage collector.</p>
-
-<p>Today, I&rsquo;ll try to explain what I liked about Rust. The upcoming ones are reserved for topics like FFI and concurrency, and how I got around some of the worst situations I&rsquo;ve experienced as a newbie who just into the systems programming world.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot/">Read on &rarr;</a>
-    </footer>
   
 
+<span class="byline author vcard">Posted by <span class="fn">Ravi Shankar</span></span>
 
-    </article>
-  
-  
-    <article>
       
-  <header>
+
+
+
+
+<time class='entry-date' datetime='2015-07-08T18:17:58+05:30'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:17 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ffi/'>ffi</a>, <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/rust/'>rust</a>
+  
+</span>
+
+
+    </p>
     
-      <h1 class="entry-title"><a href="/blog/2015/06/23/my-new-octopress-blog/">My New Blog!</a></h1>
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://wafflespeanut.github.io/blog/2015/07/08/a-pythonist-getting-rusty-these-days-dot-dot-dot-part-2/" data-via="wafflespeanut" data-counturl="http://wafflespeanut.github.io/blog/2015/07/08/a-pythonist-getting-rusty-these-days-dot-dot-dot-part-2/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
     
-    
-      <p class="meta">
-        
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot/" title="Previous Post: A Pythonist getting Rusty these days... (Part 1)">&laquo; A Pythonist getting Rusty these days... (Part 1)</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-
-
-
-<time class='entry-date' datetime='2015-06-23T03:52:10+05:30'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>3:52 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&rsquo;ve been a wordpress blogger for over two years now. My previous blog <a href="https://wafflescrazypeanut.wordpress.com">Arrow of time</a> was actually meant for writing about Physics (among other random stuff). It was a success, and I had a great time writing in my wordpress blog. But nowadays, I&rsquo;m more interested in code (than in Physics) and so, I think it&rsquo;s time to move on.</p>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2015/06/23/my-new-octopress-blog/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -416,6 +385,7 @@
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -430,7 +400,10 @@
       var disqus_shortname = 'wafflespeanut';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://wafflespeanut.github.io/blog/2015/07/08/a-pythonist-getting-rusty-these-days-dot-dot-dot-part-2/';
+        var disqus_url = 'http://wafflespeanut.github.io/blog/2015/07/08/a-pythonist-getting-rusty-these-days-dot-dot-dot-part-2/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

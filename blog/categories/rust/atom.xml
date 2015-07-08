@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rust | Arrow of Code]]></title>
   <link href="http://wafflespeanut.github.io/blog/categories/rust/atom.xml" rel="self"/>
   <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-07-08T17:21:43+05:30</updated>
+  <updated>2015-07-08T23:35:01+05:30</updated>
   <id>http://wafflespeanut.github.io/</id>
   <author>
     <name><![CDATA[Ravi Shankar]]></name>
@@ -12,6 +12,142 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[A Pythonist getting Rusty these days... (Part 2)]]></title>
+    <link href="http://wafflespeanut.github.io/blog/2015/07/08/a-pythonist-getting-rusty-these-days-dot-dot-dot-part-2/"/>
+    <updated>2015-07-08T18:17:58+05:30</updated>
+    <id>http://wafflespeanut.github.io/blog/2015/07/08/a-pythonist-getting-rusty-these-days-dot-dot-dot-part-2</id>
+    <content type="html"><![CDATA[<p>Last time, I talked about <a href="http://wafflespeanut.github.io/blog/2015/07/05/a-pythonist-getting-rusty-these-days-dot">my experience with Rust as a newbie</a>. Today, I&rsquo;ll try to explain the hard time I had with the <a href="http://en.wikipedia.org/wiki/Foreign_function_interface">FFI</a>. Well, I shouldn&rsquo;t have gone into it, but I needed that for communication with Python<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
+
+<p>FFI was <em>hard</em>, because I can&rsquo;t quite guess what happens along the way. Errors don&rsquo;t mean much, which means that I can get the results only during runtime (and then figure out whether it&rsquo;s the cake I want or not). Then, there&rsquo;s this <em>interesting</em> problem of memory safety. Rust is specifically designed to be memory safe, but most of the other languages aren&rsquo;t (especially C, and so is its descendant, &ldquo;Python&rdquo;). They both can only speak &ldquo;C&rdquo; in their low level. So, Rust <em>has</em> to speak C if it wants to communicate with Python.</p>
+
+<p>This means that there&rsquo;s no sending a list from Python and getting it in Rust. Both have entirely different data structures. And, we don&rsquo;t have to say about Rust - its clockworks are <em>crazier</em> than C or Python. But, thanks to Rust&rsquo;s &ldquo;libc&rdquo; and Python&rsquo;s &ldquo;ctypes&rdquo; libraries, which enable both the languages to communicate in C.</p>
+
+<h1>Establishing the FFI</h1>
+
+<p>My script was a bit <em>cranky</em>. Each time, it has a specific list of files (with MD5-hashed filenames). So, I decided to send the necessary file paths as an array of strings. Things got somewhat complicated here. To send an array, I should create one using the <code>ctypes</code>, grab its address (a pointer) and send it along with its length.</p>
+
+<p>In Rust, I should already have a setup like this&hellip;</p>
+
+<pre><code class="rust">#![feature(libc)]       // the thing is pretty useful, but unstable
+use std::slice;
+use libc::{size_t, c_char};
+
+#[no_mangle]            // Please don't mangle the names, my dear Rust!
+pub extern fn get_stuff(array: *const *const c_char, length: size_t) {
+    let array = unsafe { slice::from_raw_parts(array, length as usize) };
+    // do some stuff with the array
+}
+</code></pre>
+
+<p>&hellip; so that, I could link it to Python like this,</p>
+
+<pre><code class="python">import ctypes
+
+lib = ctypes.cdll.LoadLibrary("test.so")
+list_to_send = ['blah', 'blah', 'blah']
+lib.get_stuff.argtypes = (ctypes.POINTER(ctypes.c_char_p), ctypes.c_size_t)
+
+c_array = (ctypes.c_char_p * len(list_to_send))(*list_to_send)  # send the array
+lib.get_stuff(c_array, len(list_to_send))   # sending stuff to our Rust library
+</code></pre>
+
+<p>Python&rsquo;s side is pretty much self-explanatory - just take a list, declare the argument types, form an array from the list and send its reference, along with its length. But, there are some interesting things going on at Rust&rsquo;s side. I&rsquo;m sure you&rsquo;re aware of <code>pub extern</code>, which allows a function to be publicly called and especially from &ldquo;C&rdquo;.</p>
+
+<p>Now, there&rsquo;s an <code>unsafe</code>. Like I said previously, Rust guarantees memory safety, but it doesn&rsquo;t know whether the data from an FFI is safe or not. So, we&rsquo;re supposed to use <code>unsafe</code> to tell Rust that everything outside this <code>unsafe { }</code> block is <em>truly</em> safe indeed, and that it should kindly lower its safety measures a little bit, so that the <em>unsafe</em> data jumps inside<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>.</p>
+
+<p>The arguments indicate an array as a whole (which is understandable). <code>*const c_char</code> is a string in C, and so <code>*const *const c_char</code> is a pointer to an array of string of length <code>size_t</code>, from which the data is extracted into a Rust-type slice using <code>from_raw_parts</code>.</p>
+
+<p>Now that we&rsquo;ve got a slice of <strong>C-type</strong> strings, we gotta convert them to Rust-type strings - either <code>&amp;str</code> or <code>String</code> (well, I prefer <code>&amp;str</code>). For that, we can do some nice things with the <code>map</code>,</p>
+
+<pre><code class="rust">use std::str;
+use std::ffi::CStr;
+
+let mut stuff: Vec&lt;&amp;str&gt; = array.iter()
+    .map(|&amp;p| unsafe { CStr::from_ptr(p) })
+    .map(|c_string| c_string.to_bytes())
+    .map(|byte| str::from_utf8(byte).unwrap())
+    .collect();
+</code></pre>
+
+<p>We simply iterate through the slice, get the C-type string, convert it to bytes, from which we can then extract our UTF-8 strings<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>.</p>
+
+<p>Okay, so we have a vector of <code>&amp;str</code>, alright. Now, I do some stuff - in this case, I iterate through the filenames, grab the contents from them, decrypt the bytes, search through them, count the occurrences of a word in those files and collect the values. Then, I should send it back to Python.</p>
+
+<p>Since the counts are just a number (an <code>u8</code>), I just collect them as a <code>String</code>, then <code>connect</code> them, convert the Rust-type <code>String</code> to a C-type string and send it to python.</p>
+
+<p>In Rust, we now have&hellip;<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup></p>
+
+<pre><code class="rust">use std::mem;
+use std::ffi::CString;
+
+pub extern fn get_stuff(array: *const *const c_char, length: size_t) -&gt; *const c_char {
+    // our entire operations
+    let count_string = occurrences.connect(" ");
+    let c_string = CString::new(count_string).unwrap().into_ptr();
+    mem::forget(c_string);          // bzzzz... leak, leak, leak...
+    c_string
+}
+</code></pre>
+
+<p>I used <code>mem::forget</code> because <code>c_string</code> is owned by Rust. Even if we transfer the pointer, we can&rsquo;t be sure if it&rsquo;s been freed on Rust&rsquo;s side. So, we <em>purposely</em> leak the memory so that the FFI code (which, in this case, is Python) now owns the thing, and Rust has left out a pointer!</p>
+
+<p>Now, that <code>c_string</code> is sent back to Python as a pointer, Python receives it nicely, gets the string from it and finally, do all the things I desired. Yeah, but life&rsquo;s not that simple. There&rsquo;s a problem here. What happened to the pointer we had just received? It&rsquo;s just there (as a dump!). We can&rsquo;t simply free the pointer in Python (like I said, both Rust &amp; Python have totally different implementations). So, that represents a terrible <a href="https://en.wikipedia.org/wiki/Memory_leak"><strong>memory leak!</strong></a></p>
+
+<p>The leak isn&rsquo;t a big problem for my application (the memory is gonna be flushed out by the OS sometime anyway), but it&rsquo;s still bad to have leaks. A good way is to return the pointer back to Rust, so that it can be freed properly. Only one (unstable) method offers this &ldquo;proper freeing&rdquo; of a pointer - <code>CString::from_ptr</code>.</p>
+
+<p>Now, there&rsquo;s a little addition to the Rust code,</p>
+
+<pre><code class="rust">#![feature(cstr_memory)]        // unstable feature
+
+#[no_mangle]
+pub extern fn kill_pointer(p: *const c_char) {
+    unsafe { CString::from_ptr(p) };
+}
+</code></pre>
+
+<p>and my Python code looks like,</p>
+
+<pre><code class="python"># argument types should be mentioned while doing FFI in Python
+# forgetting that has caused segfaults for me
+lib.get_stuff.argtypes = (ctypes.POINTER(ctypes.c_char_p), ctypes.c_size_t)
+lib.get_stuff.restype = ctypes.c_void_p
+lib.kill_pointer.argtypes = [ctypes.c_void_p]
+
+# list_to_send = ['blah', 'blah', 'blah']
+c_array = (ctypes.c_char_p * len(list_to_send))(*list_to_send)  # send the array
+c_pointer = lib.get_stuff(c_array, len(list_to_send))
+count_string = ctypes.c_char_p(c_pointer).value     # get the string
+
+lib.kill_pointer(c_pointer)         # send the pointer back for hack &amp; slash!
+</code></pre>
+
+<p>In Python, I get the pointer, extract the string from it, and send it back to Rust. So, I (had to) create a function in Rust to just <em>kill</em> this ugly pointer. The <code>CString::from_ptr</code> consumes the pointer and produces a <code>CString</code> for Rust, which then gets deallocated as the scope runs out of life, which means that the obtained <code>CString</code> should get destroyed<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>. And, the processes are now memory safe!</p>
+
+<h2>Okay, what are the perks?</h2>
+
+<p>Only one - <em>performance</em>. The decrypting &amp; searching (of ~200 files) took about a minute in Python, whereas Rust did it in ~0.4 seconds! When I got to see that <em>effect</em>, I decided (almost immediately) to use the Rust-Python FFI for almost all my computation-related works in the future. As an undergrad in aeronautics, I&rsquo;ve got some ugly computations (for which I&rsquo;ve always used proprietary softwares). Maybe it&rsquo;s time for me to start using open-source and do the works all by myself!</p>
+
+<p><small><strong>Sidenote:</strong> I&rsquo;m still entirely not sure whether this is efficient, or whether this is the proper way to do things in systems programming, so feel free to drop any suggestions. I welcome your <em>criticism</em> happily! Again, thanks to all the Rustaceans at the #rust IRC channel for helping me out whenever I got stuck.</small></p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Of course, it&rsquo;s for that very same <a href="https://github.com/Wafflespeanut/biographer">diary</a> I had talked about. I had to decrypt a lot of files and search through them (which Rust is pretty good at).<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>Well, this also means that it&rsquo;s the coder&rsquo;s job to ensure that the code inside the <code>unsafe</code> block is actually safe.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p>Thanks to <a href="http://stackoverflow.com/a/31075375/2313792">this wonderful answer</a> from a Rustacean at Stackoverflow.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
+<li id="fn:4">
+<p>I used <code>as_ptr</code> at first, but <a href="http://stackoverflow.com/a/31083443/2313792">it was suggested</a> that <code>into_ptr</code> serves much better for that purpose (too bad that it&rsquo;s <em>unstable</em>).<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
+<li id="fn:5">
+<p>I had a chat about that in the #rust IRC channel, and some of them suggested that it&rsquo;s the only way, though I don&rsquo;t have a choice&hellip;<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A Pythonist getting Rusty these days... (Part 1)]]></title>
