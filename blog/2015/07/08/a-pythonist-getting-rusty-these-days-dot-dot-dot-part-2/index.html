@@ -100,6 +100,9 @@
 
 <p>FFI was <em>hard</em>, because I can&rsquo;t quite guess what happens along the way. Errors don&rsquo;t mean much, which means that I can get the results only during runtime (and then figure out whether it&rsquo;s the cake I want or not). Then, there&rsquo;s this <em>interesting</em> problem of memory safety. Rust is specifically designed to be memory safe, but most of the other languages aren&rsquo;t (especially C, and so is its descendant, &ldquo;Python&rdquo;). They both can only speak &ldquo;C&rdquo; in their low level. So, Rust <em>has</em> to speak C if it wants to communicate with Python.</p>
 
+<!-- more -->
+
+
 <p>This means that there&rsquo;s no sending a list from Python and getting it in Rust. Both have entirely different data structures. And, we don&rsquo;t have to say about Rust - its clockworks are <em>crazier</em> than C or Python. But, thanks to Rust&rsquo;s &ldquo;libc&rdquo; and Python&rsquo;s &ldquo;ctypes&rdquo; libraries, which enable both the languages to communicate in C.</p>
 
 <h1>Establishing the FFI</h1>
