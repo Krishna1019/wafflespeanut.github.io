@@ -105,7 +105,7 @@
 
 <p>This means that there&rsquo;s no sending a list from Python and getting it in Rust. Both have entirely different data structures. And, we don&rsquo;t have to say about Rust - its clockworks are <em>crazier</em> than C or Python. But, thanks to Rust&rsquo;s &ldquo;libc&rdquo; and Python&rsquo;s &ldquo;ctypes&rdquo; libraries, which enable both the languages to communicate in C.</p>
 
-<h1>Establishing the FFI</h1>
+<h1>Establishing the Rust-Python FFI</h1>
 
 <p>My script was a bit <em>cranky</em>. Each time, it has a specific list of files (with MD5-hashed filenames). So, I decided to send the necessary file paths as an array of strings. Things got somewhat complicated here. To send an array, I should create one using the <code>ctypes</code>, grab its address (a pointer) and send it along with its length.</p>
 
