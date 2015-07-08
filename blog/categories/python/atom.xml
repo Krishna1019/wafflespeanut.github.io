@@ -4,7 +4,7 @@
   <title><![CDATA[Category: python | Arrow of Code]]></title>
   <link href="http://wafflespeanut.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-07-08T23:55:06+05:30</updated>
+  <updated>2015-07-09T00:28:04+05:30</updated>
   <id>http://wafflespeanut.github.io/</id>
   <author>
     <name><![CDATA[Ravi Shankar]]></name>
@@ -130,7 +130,9 @@ lib.kill_pointer(c_pointer)         # send the pointer back for hack &amp; slash
 
 <h2>Okay, what are the perks?</h2>
 
-<p>Only one - <em>performance</em>. The decrypting &amp; searching (of ~200 files) took about a minute in Python, whereas Rust did it in ~0.4 seconds! When I got to see that <em>effect</em>, I decided (almost immediately) to use the Rust-Python FFI for almost all my computation-related works in the future. As an undergrad in aeronautics, I&rsquo;ve got some ugly computations (for which I&rsquo;ve always used proprietary softwares). Maybe it&rsquo;s time for me to start using open-source and do the works all by myself!</p>
+<p>Only one - <em>performance</em>. The decrypting &amp; searching (of ~200 files) took about a minute in Python, whereas Rust did it in ~0.4 seconds!</p>
+
+<p>When I got to see that <em>effect</em>, I decided (almost immediately) to use the Rust-Python FFI for almost all my computation-related works in the future. As an undergrad in aeronautics, I&rsquo;ve got some ugly computations (for which I&rsquo;ve always used proprietary software). Maybe it&rsquo;s time for me to start using open-source and do the works all by myself!</p>
 
 <p><small><strong>Sidenote:</strong> I&rsquo;m still entirely not sure whether this is efficient, or whether this is the proper way to do things in systems programming, so feel free to drop any suggestions. I welcome your <em>criticism</em> happily! Again, thanks to all the Rustaceans at the #rust IRC channel for helping me out whenever I got stuck.</small></p>
 <div class="footnotes">
