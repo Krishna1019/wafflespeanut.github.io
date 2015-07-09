@@ -4,7 +4,7 @@
   <title><![CDATA[Category: python | Arrow of Code]]></title>
   <link href="http://wafflespeanut.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-07-09T09:49:14+05:30</updated>
+  <updated>2015-07-09T09:57:08+05:30</updated>
   <id>http://wafflespeanut.github.io/</id>
   <author>
     <name><![CDATA[Ravi Shankar]]></name>
@@ -98,7 +98,7 @@ pub extern fn get_stuff(array: *const *const c_char, length: size_t) -&gt; *cons
 
 <p>Or, we could do something else. The nightly version offers an <code>into_ptr</code> method, which consumes the <code>CString</code> without deallocating the memory. So, we could also use that&hellip;</p>
 
-<pre><code class="rust">#![feature(cstr_memory)]
+<pre><code class="rust">#![feature(cstr_memory)]        // unstable feature
 use std::ffi::CString;
 
 pub extern fn get_stuff(array: *const *const c_char, length: size_t) -&gt; *const c_char {
@@ -108,7 +108,7 @@ pub extern fn get_stuff(array: *const *const c_char, length: size_t) -&gt; *cons
 }
 </code></pre>
 
-<p>And, I personally think it&rsquo;s better, because there&rsquo;s another <em>unstable</em> method which does the opposite (which we&rsquo;ll be needing soon).</p>
+<p>And, I personally think it&rsquo;s better, because there&rsquo;s another <em>unstable</em> method which does the opposite (which we&rsquo;ll be needing soon). If you just wanna stick to the stable version (<em>and</em> avoid memory leaks), then you&rsquo;ve got no other choice, but to wait for a while, so that those methods become stable.</p>
 
 <p>Anyways, let&rsquo;s get back to business. Now, that <code>c_string</code> is sent back to Python as a pointer, Python receives it nicely, gets the string from it and <em>finally</em>, do all the things I desired. Yeah, but life&rsquo;s not that simple. There&rsquo;s a problem here. What happened to the pointer we had just received? It&rsquo;s just there (as a dump!). We can&rsquo;t simply free the pointer in Python (like I said, both Rust &amp; Python have totally different implementations). So, that represents a terrible <a href="https://en.wikipedia.org/wiki/Memory_leak"><strong>memory leak!</strong></a></p>
 

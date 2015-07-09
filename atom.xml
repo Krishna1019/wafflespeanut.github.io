@@ -4,7 +4,7 @@
   <title><![CDATA[Arrow of Code]]></title>
   <link href="http://wafflespeanut.github.io/atom.xml" rel="self"/>
   <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-07-09T09:49:14+05:30</updated>
+  <updated>2015-07-09T09:57:08+05:30</updated>
   <id>http://wafflespeanut.github.io/</id>
   <author>
     <name><![CDATA[Ravi Shankar]]></name>
@@ -145,7 +145,7 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="err">#</span><span class="o">!</span><span class="p">[</span><span class="n">feature</span><span class="p">(</span><span class="n">cstr_memory</span><span class="p">)]</span>
+</pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="err">#</span><span class="o">!</span><span class="p">[</span><span class="n">feature</span><span class="p">(</span><span class="n">cstr_memory</span><span class="p">)]</span>        <span class="c1">// unstable feature</span>
 </span><span class='line'><span class="kn">use</span> <span class="n">std</span><span class="o">::</span><span class="n">ffi</span><span class="o">::</span><span class="n">CString</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">pub</span> <span class="k">extern</span> <span class="k">fn</span> <span class="n">get_stuff</span><span class="p">(</span><span class="n">array</span><span class="o">:</span> <span class="o">*</span><span class="kr">const</span> <span class="o">*</span><span class="kr">const</span> <span class="n">c_char</span><span class="p">,</span> <span class="n">length</span><span class="o">:</span> <span class="n">size_t</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="o">*</span><span class="kr">const</span> <span class="n">c_char</span> <span class="p">{</span>
@@ -156,7 +156,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>And, I personally think it&rsquo;s better, because there&rsquo;s another <em>unstable</em> method which does the opposite (which we&rsquo;ll be needing soon).</p>
+<p>And, I personally think it&rsquo;s better, because there&rsquo;s another <em>unstable</em> method which does the opposite (which we&rsquo;ll be needing soon). If you just wanna stick to the stable version (<em>and</em> avoid memory leaks), then you&rsquo;ve got no other choice, but to wait for a while, so that those methods become stable.</p>
 
 <p>Anyways, let&rsquo;s get back to business. Now, that <code>c_string</code> is sent back to Python as a pointer, Python receives it nicely, gets the string from it and <em>finally</em>, do all the things I desired. Yeah, but life&rsquo;s not that simple. There&rsquo;s a problem here. What happened to the pointer we had just received? It&rsquo;s just there (as a dump!). We can&rsquo;t simply free the pointer in Python (like I said, both Rust &amp; Python have totally different implementations). So, that represents a terrible <a href="https://en.wikipedia.org/wiki/Memory_leak"><strong>memory leak!</strong></a></p>
 
