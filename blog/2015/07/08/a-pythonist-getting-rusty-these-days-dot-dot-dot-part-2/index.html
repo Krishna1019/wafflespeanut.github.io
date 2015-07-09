@@ -198,20 +198,22 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
+<span class='line-number'>11</span>
 </pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="kn">use</span> <span class="n">std</span><span class="o">::</span><span class="n">mem</span><span class="p">;</span>
 </span><span class='line'><span class="kn">use</span> <span class="n">std</span><span class="o">::</span><span class="n">ffi</span><span class="o">::</span><span class="n">CString</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">pub</span> <span class="k">extern</span> <span class="k">fn</span> <span class="n">get_stuff</span><span class="p">(</span><span class="n">array</span><span class="o">:</span> <span class="o">*</span><span class="kr">const</span> <span class="o">*</span><span class="kr">const</span> <span class="n">c_char</span><span class="p">,</span> <span class="n">length</span><span class="o">:</span> <span class="n">size_t</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="o">*</span><span class="kr">const</span> <span class="n">c_char</span> <span class="p">{</span>
 </span><span class='line'>    <span class="c1">// our entire operations</span>
 </span><span class='line'>    <span class="kd">let</span> <span class="n">count_string</span> <span class="o">=</span> <span class="n">occurrences</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="kd">let</span> <span class="n">c_string</span> <span class="o">=</span> <span class="n">CString</span><span class="o">::</span><span class="n">new</span><span class="p">(</span><span class="n">count_string</span><span class="p">).</span><span class="n">unwrap</span><span class="p">().</span><span class="n">as_ptr</span><span class="p">();</span>
-</span><span class='line'>    <span class="n">mem</span><span class="o">::</span><span class="n">forget</span><span class="p">(</span><span class="n">c_string</span><span class="p">);</span>          <span class="c1">// bzzzz... leak, leak, leak...</span>
-</span><span class='line'>    <span class="n">c_string</span>
+</span><span class='line'>    <span class="kd">let</span> <span class="n">c_string</span> <span class="o">=</span> <span class="n">CString</span><span class="o">::</span><span class="n">new</span><span class="p">(</span><span class="n">count_string</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>
+</span><span class='line'>    <span class="kd">let</span> <span class="n">raw_ptr</span> <span class="o">=</span> <span class="n">c_string</span><span class="p">.</span><span class="n">as_ptr</span><span class="p">();</span>    <span class="c1">// get the pointer and forget the object</span>
+</span><span class='line'>    <span class="n">mem</span><span class="o">::</span><span class="n">forget</span><span class="p">(</span><span class="n">c_string</span><span class="p">);</span>              <span class="c1">// bzzzz... leak, leak, leak...</span>
+</span><span class='line'>    <span class="n">raw_ptr</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The <code>as_ptr</code> method takes an <em>immutable</em> reference and constructs a <code>CString</code> pointer. Then, I&rsquo;ve used <code>mem::forget</code> because <code>c_string</code> is owned by Rust. Even if we transfer the pointer, we can&rsquo;t be sure if it&rsquo;s been freed on Rust&rsquo;s side. So, we <em>purposely</em> leak the memory so that the FFI code (which, in this case, is Python) now owns the thing, and Rust has left out a pointer!</p>
+<p>The <code>as_ptr</code> method takes an <em>immutable</em> reference and constructs a <code>CString</code> object. Then, I&rsquo;ve used <code>mem::forget</code> because the <code>c_string</code> is owned by Rust. Even if we transfer the pointer, we can&rsquo;t be sure if it&rsquo;s been freed on Rust&rsquo;s side. So, we ask Rust to cut it loose, thereby <em>purposely</em> leak the memory, so that the FFI code (which, in this case, is Python) now owns the thing.</p>
 
 <p>Or, we could do something else. The nightly version offers an <code>into_ptr</code> method, which consumes the <code>CString</code> without deallocating the memory. So, we could also use that&hellip;</p>
 

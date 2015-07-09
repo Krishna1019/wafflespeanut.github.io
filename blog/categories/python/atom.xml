@@ -4,7 +4,7 @@
   <title><![CDATA[Category: python | Arrow of Code]]></title>
   <link href="http://wafflespeanut.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-07-09T18:00:35+05:30</updated>
+  <updated>2015-07-09T20:38:07+05:30</updated>
   <id>http://wafflespeanut.github.io/</id>
   <author>
     <name><![CDATA[Ravi Shankar]]></name>
@@ -88,13 +88,14 @@ use std::ffi::CString;
 pub extern fn get_stuff(array: *const *const c_char, length: size_t) -&gt; *const c_char {
     // our entire operations
     let count_string = occurrences.connect(" ");
-    let c_string = CString::new(count_string).unwrap().as_ptr();
-    mem::forget(c_string);          // bzzzz... leak, leak, leak...
-    c_string
+    let c_string = CString::new(count_string).unwrap();
+    let raw_ptr = c_string.as_ptr();    // get the pointer and forget the object
+    mem::forget(c_string);              // bzzzz... leak, leak, leak...
+    raw_ptr
 }
 </code></pre>
 
-<p>The <code>as_ptr</code> method takes an <em>immutable</em> reference and constructs a <code>CString</code> pointer. Then, I&rsquo;ve used <code>mem::forget</code> because <code>c_string</code> is owned by Rust. Even if we transfer the pointer, we can&rsquo;t be sure if it&rsquo;s been freed on Rust&rsquo;s side. So, we <em>purposely</em> leak the memory so that the FFI code (which, in this case, is Python) now owns the thing, and Rust has left out a pointer!</p>
+<p>The <code>as_ptr</code> method takes an <em>immutable</em> reference and constructs a <code>CString</code> object. Then, I&rsquo;ve used <code>mem::forget</code> because the <code>c_string</code> is owned by Rust. Even if we transfer the pointer, we can&rsquo;t be sure if it&rsquo;s been freed on Rust&rsquo;s side. So, we ask Rust to cut it loose, thereby <em>purposely</em> leak the memory, so that the FFI code (which, in this case, is Python) now owns the thing.</p>
 
 <p>Or, we could do something else. The nightly version offers an <code>into_ptr</code> method, which consumes the <code>CString</code> without deallocating the memory. So, we could also use that&hellip;</p>
 
