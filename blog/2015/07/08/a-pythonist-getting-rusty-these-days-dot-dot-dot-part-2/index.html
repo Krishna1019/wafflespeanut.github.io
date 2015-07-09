@@ -148,7 +148,7 @@
 </span><span class='line'><span class="n">list_to_send</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;blah&#39;</span><span class="p">,</span> <span class="s">&#39;blah&#39;</span><span class="p">,</span> <span class="s">&#39;blah&#39;</span><span class="p">]</span>
 </span><span class='line'><span class="n">lib</span><span class="o">.</span><span class="n">get_stuff</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">)</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">c_array</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_to_send</span><span class="p">))(</span><span class="o">*</span><span class="n">list_to_send</span><span class="p">)</span>  <span class="c"># send the array</span>
+</span><span class='line'><span class="n">c_array</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_to_send</span><span class="p">))(</span><span class="o">*</span><span class="n">list_to_send</span><span class="p">)</span>  <span class="c"># generate the array</span>
 </span><span class='line'><span class="n">lib</span><span class="o">.</span><span class="n">get_stuff</span><span class="p">(</span><span class="n">c_array</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_to_send</span><span class="p">))</span>   <span class="c"># sending stuff to our Rust library</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -248,7 +248,9 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
+<span class='line-number'>7</span>
 </pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="err">#</span><span class="o">!</span><span class="p">[</span><span class="n">feature</span><span class="p">(</span><span class="n">cstr_memory</span><span class="p">)]</span>        <span class="c1">// unstable feature</span>
+</span><span class='line'><span class="kn">use</span> <span class="n">std</span><span class="o">::</span><span class="n">ffi</span><span class="o">::</span><span class="n">CString</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="cp">#[no_mangle]</span>
 </span><span class='line'><span class="k">pub</span> <span class="k">extern</span> <span class="k">fn</span> <span class="n">kill_pointer</span><span class="p">(</span><span class="n">p</span><span class="o">:</span> <span class="o">*</span><span class="kr">const</span> <span class="n">c_char</span><span class="p">)</span> <span class="p">{</span>
@@ -257,7 +259,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>and my Python code looks like,</p>
+<p>and my final Python code looks like this,</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -271,24 +273,32 @@
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c"># argument types should be mentioned while doing FFI in Python</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">ctypes</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">lib</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="s">&quot;test.so&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">list_to_send</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;blah&#39;</span><span class="p">,</span> <span class="s">&#39;blah&#39;</span><span class="p">,</span> <span class="s">&#39;blah&#39;</span><span class="p">]</span>
+</span><span class='line'><span class="c"># argument types should be mentioned while doing FFI in Python</span>
 </span><span class='line'><span class="c"># forgetting that has caused segfaults for me</span>
 </span><span class='line'><span class="n">lib</span><span class="o">.</span><span class="n">get_stuff</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">)</span>
 </span><span class='line'><span class="n">lib</span><span class="o">.</span><span class="n">get_stuff</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span>
 </span><span class='line'><span class="n">lib</span><span class="o">.</span><span class="n">kill_pointer</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">]</span>
 </span><span class='line'>
-</span><span class='line'><span class="c"># list_to_send = [&#39;blah&#39;, &#39;blah&#39;, &#39;blah&#39;]</span>
-</span><span class='line'><span class="n">c_array</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_to_send</span><span class="p">))(</span><span class="o">*</span><span class="n">list_to_send</span><span class="p">)</span>  <span class="c"># send the array</span>
+</span><span class='line'><span class="n">c_array</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_to_send</span><span class="p">))(</span><span class="o">*</span><span class="n">list_to_send</span><span class="p">)</span>  <span class="c"># generate the array</span>
+</span><span class='line'><span class="c"># send the stuff to Rust library and get the pointer</span>
 </span><span class='line'><span class="n">c_pointer</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">get_stuff</span><span class="p">(</span><span class="n">c_array</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_to_send</span><span class="p">))</span>
 </span><span class='line'><span class="n">count_string</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="n">c_pointer</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>     <span class="c"># get the string</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">lib</span><span class="o">.</span><span class="n">kill_pointer</span><span class="p">(</span><span class="n">c_pointer</span><span class="p">)</span>         <span class="c"># send the pointer back for hack &amp; slash!</span>
+</span><span class='line'><span class="n">lib</span><span class="o">.</span><span class="n">kill_pointer</span><span class="p">(</span><span class="n">c_pointer</span><span class="p">)</span>     <span class="c"># send the pointer back for hack &amp; slash!</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>In Python, I get the pointer, extract the string from it, and send it back to Rust. So, I (had to) create a function in Rust to just <em>kill</em> this ugly pointer. The <code>CString::from_ptr</code> consumes the pointer and produces a <code>CString</code> for Rust, which then gets deallocated as the scope runs out of life, which means that the obtained <code>CString</code> should get destroyed<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>. And, the processes are now memory safe!</p>
 
-<h2>Okay, what are the perks?</h2>
+<h2>So much for the FFI. What are the perks?</h2>
 
 <p>Only one - <em>performance</em>. The decrypting &amp; searching (of ~200 files) took about a minute in Python, whereas Rust did it in ~0.4 seconds!</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ffi | Arrow of Code]]></title>
   <link href="http://wafflespeanut.github.io/blog/categories/ffi/atom.xml" rel="self"/>
   <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-07-09T09:57:08+05:30</updated>
+  <updated>2015-07-09T10:07:22+05:30</updated>
   <id>http://wafflespeanut.github.io/</id>
   <author>
     <name><![CDATA[Ravi Shankar]]></name>
@@ -52,7 +52,7 @@ lib = ctypes.cdll.LoadLibrary("test.so")
 list_to_send = ['blah', 'blah', 'blah']
 lib.get_stuff.argtypes = (ctypes.POINTER(ctypes.c_char_p), ctypes.c_size_t)
 
-c_array = (ctypes.c_char_p * len(list_to_send))(*list_to_send)  # send the array
+c_array = (ctypes.c_char_p * len(list_to_send))(*list_to_send)  # generate the array
 lib.get_stuff(c_array, len(list_to_send))   # sending stuff to our Rust library
 </code></pre>
 
@@ -117,6 +117,7 @@ pub extern fn get_stuff(array: *const *const c_char, length: size_t) -&gt; *cons
 <p>Now, there&rsquo;s a little addition to the Rust code,</p>
 
 <pre><code class="rust">#![feature(cstr_memory)]        // unstable feature
+use std::ffi::CString;
 
 #[no_mangle]
 pub extern fn kill_pointer(p: *const c_char) {
@@ -124,25 +125,29 @@ pub extern fn kill_pointer(p: *const c_char) {
 }
 </code></pre>
 
-<p>and my Python code looks like,</p>
+<p>and my final Python code looks like this,</p>
 
-<pre><code class="python"># argument types should be mentioned while doing FFI in Python
+<pre><code class="python">import ctypes
+
+lib = ctypes.cdll.LoadLibrary("test.so")
+list_to_send = ['blah', 'blah', 'blah']
+# argument types should be mentioned while doing FFI in Python
 # forgetting that has caused segfaults for me
 lib.get_stuff.argtypes = (ctypes.POINTER(ctypes.c_char_p), ctypes.c_size_t)
 lib.get_stuff.restype = ctypes.c_void_p
 lib.kill_pointer.argtypes = [ctypes.c_void_p]
 
-# list_to_send = ['blah', 'blah', 'blah']
-c_array = (ctypes.c_char_p * len(list_to_send))(*list_to_send)  # send the array
+c_array = (ctypes.c_char_p * len(list_to_send))(*list_to_send)  # generate the array
+# send the stuff to Rust library and get the pointer
 c_pointer = lib.get_stuff(c_array, len(list_to_send))
 count_string = ctypes.c_char_p(c_pointer).value     # get the string
 
-lib.kill_pointer(c_pointer)         # send the pointer back for hack &amp; slash!
+lib.kill_pointer(c_pointer)     # send the pointer back for hack &amp; slash!
 </code></pre>
 
 <p>In Python, I get the pointer, extract the string from it, and send it back to Rust. So, I (had to) create a function in Rust to just <em>kill</em> this ugly pointer. The <code>CString::from_ptr</code> consumes the pointer and produces a <code>CString</code> for Rust, which then gets deallocated as the scope runs out of life, which means that the obtained <code>CString</code> should get destroyed<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>. And, the processes are now memory safe!</p>
 
-<h2>Okay, what are the perks?</h2>
+<h2>So much for the FFI. What are the perks?</h2>
 
 <p>Only one - <em>performance</em>. The decrypting &amp; searching (of ~200 files) took about a minute in Python, whereas Rust did it in ~0.4 seconds!</p>
 
