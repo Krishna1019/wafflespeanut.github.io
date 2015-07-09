@@ -184,7 +184,7 @@
 
 <p>Okay, so we have a vector of <code>&amp;str</code>, alright. Now, I do some stuff - in this case, I iterate through the filenames, grab the contents from them, decrypt the bytes, search through them, count the occurrences of a word in those files and collect the values. Then, I should send it back to Python.</p>
 
-<p>Since the counts are just a number (an <code>u8</code>), I just collect them as a <code>String</code>, then <code>connect</code> them, convert the Rust-type <code>String</code> to a C-type string and send it to python.</p>
+<p>Since the counts are just a number (an <code>u8</code>), I just collect them as a <code>String</code>, then <code>connect</code> them, convert the Rust-type <code>String</code> to a <code>CString</code> pointer and send it to python.</p>
 
 <p>In Rust, we now have&hellip;<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup></p>
 
@@ -204,18 +204,41 @@
 </span><span class='line'><span class="k">pub</span> <span class="k">extern</span> <span class="k">fn</span> <span class="n">get_stuff</span><span class="p">(</span><span class="n">array</span><span class="o">:</span> <span class="o">*</span><span class="kr">const</span> <span class="o">*</span><span class="kr">const</span> <span class="n">c_char</span><span class="p">,</span> <span class="n">length</span><span class="o">:</span> <span class="n">size_t</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="o">*</span><span class="kr">const</span> <span class="n">c_char</span> <span class="p">{</span>
 </span><span class='line'>    <span class="c1">// our entire operations</span>
 </span><span class='line'>    <span class="kd">let</span> <span class="n">count_string</span> <span class="o">=</span> <span class="n">occurrences</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="kd">let</span> <span class="n">c_string</span> <span class="o">=</span> <span class="n">CString</span><span class="o">::</span><span class="n">new</span><span class="p">(</span><span class="n">count_string</span><span class="p">).</span><span class="n">unwrap</span><span class="p">().</span><span class="n">into_ptr</span><span class="p">();</span>
+</span><span class='line'>    <span class="kd">let</span> <span class="n">c_string</span> <span class="o">=</span> <span class="n">CString</span><span class="o">::</span><span class="n">new</span><span class="p">(</span><span class="n">count_string</span><span class="p">).</span><span class="n">unwrap</span><span class="p">().</span><span class="n">as_ptr</span><span class="p">();</span>
 </span><span class='line'>    <span class="n">mem</span><span class="o">::</span><span class="n">forget</span><span class="p">(</span><span class="n">c_string</span><span class="p">);</span>          <span class="c1">// bzzzz... leak, leak, leak...</span>
 </span><span class='line'>    <span class="n">c_string</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>I used <code>mem::forget</code> because <code>c_string</code> is owned by Rust. Even if we transfer the pointer, we can&rsquo;t be sure if it&rsquo;s been freed on Rust&rsquo;s side. So, we <em>purposely</em> leak the memory so that the FFI code (which, in this case, is Python) now owns the thing, and Rust has left out a pointer!</p>
+<p>The <code>as_ptr</code> method takes an <em>immutable</em> reference and constructs a <code>CString</code> pointer. Then, I&rsquo;ve used <code>mem::forget</code> because <code>c_string</code> is owned by Rust. Even if we transfer the pointer, we can&rsquo;t be sure if it&rsquo;s been freed on Rust&rsquo;s side. So, we <em>purposely</em> leak the memory so that the FFI code (which, in this case, is Python) now owns the thing, and Rust has left out a pointer!</p>
 
-<p>Now, that <code>c_string</code> is sent back to Python as a pointer, Python receives it nicely, gets the string from it and finally, do all the things I desired. Yeah, but life&rsquo;s not that simple. There&rsquo;s a problem here. What happened to the pointer we had just received? It&rsquo;s just there (as a dump!). We can&rsquo;t simply free the pointer in Python (like I said, both Rust &amp; Python have totally different implementations). So, that represents a terrible <a href="https://en.wikipedia.org/wiki/Memory_leak"><strong>memory leak!</strong></a></p>
+<p>Or, we could do something else. The nightly version offers an <code>into_ptr</code> method, which consumes the <code>CString</code> without deallocating the memory. So, we could also use that&hellip;</p>
 
-<p>The leak isn&rsquo;t a big problem for my application (the memory is gonna be flushed out by the OS sometime anyway), but it&rsquo;s still bad to have leaks. A good way is to return the pointer back to Rust, so that it can be freed properly. Only one (unstable) method offers this &ldquo;proper freeing&rdquo; of a pointer - <code>CString::from_ptr</code>.</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="err">#</span><span class="o">!</span><span class="p">[</span><span class="n">feature</span><span class="p">(</span><span class="n">cstr_memory</span><span class="p">)]</span>
+</span><span class='line'><span class="kn">use</span> <span class="n">std</span><span class="o">::</span><span class="n">ffi</span><span class="o">::</span><span class="n">CString</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">pub</span> <span class="k">extern</span> <span class="k">fn</span> <span class="n">get_stuff</span><span class="p">(</span><span class="n">array</span><span class="o">:</span> <span class="o">*</span><span class="kr">const</span> <span class="o">*</span><span class="kr">const</span> <span class="n">c_char</span><span class="p">,</span> <span class="n">length</span><span class="o">:</span> <span class="n">size_t</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="o">*</span><span class="kr">const</span> <span class="n">c_char</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// blah blah blah</span>
+</span><span class='line'>    <span class="kd">let</span> <span class="n">c_string</span> <span class="o">=</span> <span class="n">CString</span><span class="o">::</span><span class="n">new</span><span class="p">(</span><span class="n">count_string</span><span class="p">).</span><span class="n">unwrap</span><span class="p">().</span><span class="n">into_ptr</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">c_string</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And, I personally think it&rsquo;s better, because there&rsquo;s another <em>unstable</em> method which does the opposite (which we&rsquo;ll be needing soon).</p>
+
+<p>Anyways, let&rsquo;s get back to business. Now, that <code>c_string</code> is sent back to Python as a pointer, Python receives it nicely, gets the string from it and <em>finally</em>, do all the things I desired. Yeah, but life&rsquo;s not that simple. There&rsquo;s a problem here. What happened to the pointer we had just received? It&rsquo;s just there (as a dump!). We can&rsquo;t simply free the pointer in Python (like I said, both Rust &amp; Python have totally different implementations). So, that represents a terrible <a href="https://en.wikipedia.org/wiki/Memory_leak"><strong>memory leak!</strong></a></p>
+
+<p>The leak isn&rsquo;t a big problem for my application (the memory is gonna be flushed out by the OS sometime anyway), but it&rsquo;s still bad to have leaks. A good way is to return the pointer back to Rust, so that it can be freed properly. Only one (unstable) method offers this &ldquo;proper freeing&rdquo; of a pointer - <code>CString::from_ptr</code>, which does the inverse of <code>CString::into_ptr</code> (this is why I suggested using it in the first place).</p>
 
 <p>Now, there&rsquo;s a little addition to the Rust code,</p>
 
