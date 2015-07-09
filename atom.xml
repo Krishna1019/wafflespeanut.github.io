@@ -4,7 +4,7 @@
   <title><![CDATA[Arrow of Code]]></title>
   <link href="http://wafflespeanut.github.io/atom.xml" rel="self"/>
   <link href="http://wafflespeanut.github.io/"/>
-  <updated>2015-07-09T10:07:22+05:30</updated>
+  <updated>2015-07-09T18:00:35+05:30</updated>
   <id>http://wafflespeanut.github.io/</id>
   <author>
     <name><![CDATA[Ravi Shankar]]></name>
@@ -227,6 +227,8 @@
 <p>When I got to see that <em>effect</em>, I decided (almost immediately) to use the Rust-Python FFI for almost all my computation-related works in the future. As an undergrad in aeronautics, I&rsquo;ve got some ugly computations (for which I&rsquo;ve always used proprietary software). Maybe it&rsquo;s time for me to start using open-source and do the works all by myself!</p>
 
 <p><small><strong>Sidenote:</strong> I&rsquo;m still entirely not sure whether this is efficient, or whether this is the proper way to do things in systems programming, so feel free to drop any suggestions. I welcome your <em>criticism</em> happily! Again, thanks to all the Rustaceans at the #rust IRC channel for helping me out whenever I got stuck.</small></p>
+
+<p><small>You can also check out the discussion on <a href="https://news.ycombinator.com/item?id=9853688">HN</a> and <a href="https://www.reddit.com/r/rust/comments/3ckv6z/a_pythonist_getting_rusty_these_days_part_2/">Reddit</a>.</small></p>
 <div class="footnotes">
 <hr/>
 <ol>
